@@ -1,7 +1,7 @@
 using MongoDB.Driver;
 using System;
 
-namespace UnlikeService.Connection
+namespace UnlikeService.connection
 {
     public class Mongo
     {
