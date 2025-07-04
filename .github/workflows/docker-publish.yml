@@ -90,6 +90,7 @@ jobs:
               --restart always \
               --name project_unlike_publication \
               -p 8080:8080 \
+              -e ASPNETCORE_URLS=http://0.0.0.0:8080 \ 
               -e MONGO_HOSTIP=${{ secrets.MONGO_HOSTIP }} \
               -e MONGO_PORT=${{ secrets.MONGO_PORT }} \
               -e MONGO_USER=${{ secrets.MONGO_USER }} \

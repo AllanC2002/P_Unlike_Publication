@@ -4,7 +4,7 @@ LOGIN_URL = "http://52.203.72.116:8080/login"
 EMAIL = "allan"          
 PASSWORD = "1234"                        
 
-UNLIKE_URL = "http://localhost:8080/unlike"
+UNLIKE_URL = "http://3.222.208.200:8080/unlike"
 ID_PUBLICATION = "685b517f51f100fc498329ed" 
 
 login_data = {
