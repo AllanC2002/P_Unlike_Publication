@@ -12,7 +12,7 @@ login_data = {
     "password": PASSWORD
 }   
 
-print("🔐 Haciendo login...")
+print("login...")
 login_response = requests.post(LOGIN_URL, json=login_data)
 
 if login_response.status_code != 200:
