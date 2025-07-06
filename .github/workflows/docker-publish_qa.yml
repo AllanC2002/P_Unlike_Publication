@@ -4,10 +4,10 @@ on:
   schedule:
     - cron: '35 18 * * *'
   push:
-    branches: [ "main" ]
+    branches: [ "qa" ]
     tags: [ 'v*.*.*' ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "qa" ]
 
 env:
   REGISTRY: docker.io
@@ -68,7 +68,7 @@ jobs:
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
 
   deploy:
-    name: main Unlike_Publication
+    name: qa Unlike_Publication
     needs: build
     runs-on: ubuntu-latest
 
@@ -76,25 +76,25 @@ jobs:
       - name: Deploy EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_IP_PROD }}
+          host: ${{ secrets.EC2_IP }}
           username: ubuntu
-          key: ${{ secrets.EC2_PEM_PROD }}
+          key: ${{ secrets.EC2_PEM }}
           script: |
             docker stop project_unlike_publication || true
             docker rm project_unlike_publication || true
-            docker rmi ${{ secrets.DOCKER_REPO }}:main || true
+            docker rmi ${{ secrets.DOCKER_REPO }}:qa || true
 
-            docker pull ${{ secrets.DOCKER_REPO }}:main
+            docker pull ${{ secrets.DOCKER_REPO }}:qa
 
             docker run -d \
               --restart always \
               --name project_unlike_publication \
               -p 8080:8080 \
               -e ASPNETCORE_URLS=http://0.0.0.0:8080 \
-              -e MONGO_HOSTIP=${{ secrets.MONGO_HOSTIP_PROD }} \
+              -e MONGO_HOSTIP=${{ secrets.MONGO_HOSTIP }} \
               -e MONGO_PORT=${{ secrets.MONGO_PORT }} \
               -e MONGO_USER=${{ secrets.MONGO_USER }} \
               -e MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }} \
               -e MONGO_DB=${{ secrets.MONGO_DB }} \
               -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
-              ${{ secrets.DOCKER_REPO }}:main
+              ${{ secrets.DOCKER_REPO }}:qa
